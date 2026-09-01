@@ -4,28 +4,33 @@ import { Footer } from './components/layout/Footer';
 import { MobileBottomBar } from './components/layout/MobileBottomBar';
 import { HomePage } from './pages/HomePage';
 import { StoreDetailsPage } from './components/store/StoreDetailsPage';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { Toast } from './components/common/Toast';
-import { getStoreBySlug, STORES_DATA } from './data/stores';
 
 export function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'store'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'store' | 'admin'>('home');
   const [selectedStoreSlug, setSelectedStoreSlug] = useState<string>('thuckalay-market');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Sync with browser URL / hash for clean store deep-linking
+  // Sync with browser URL / hash for clean store deep-linking and admin routing
   useEffect(() => {
     const handleLocationChange = () => {
       const hash = window.location.hash;
+
+      if (hash.startsWith('#/admin') || hash === '#admin') {
+        setCurrentView('admin');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
       if (hash.startsWith('#/stores/') || hash.startsWith('#store-') || hash.startsWith('#stores/')) {
         const slug = hash.replace('#/stores/', '').replace('#stores/', '').replace('#store-', '');
-        const store = getStoreBySlug(slug) || STORES_DATA.find(s => s.id === slug || s.slug === slug);
-        if (store) {
-          setSelectedStoreSlug(store.slug);
-          setCurrentView('store');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          return;
-        }
+        setSelectedStoreSlug(slug);
+        setCurrentView('store');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
       }
+
       if (hash === '' || hash === '#home' || hash === '#stores' || hash === '#vegetables' || hash === '#fruits' || hash === '#wholesale' || hash === '#story' || hash === '#gallery' || hash === '#contact') {
         setCurrentView('home');
       }
@@ -42,9 +47,13 @@ export function App() {
       setCurrentView('store');
       window.location.hash = `#/stores/${storeSlug}`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (view === 'admin') {
+      setCurrentView('admin');
+      window.location.hash = `#/admin`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setCurrentView('home');
-      if (window.location.hash.includes('/stores/')) {
+      if (window.location.hash.includes('/stores/') || window.location.hash.includes('/admin')) {
         window.location.hash = '';
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -55,7 +64,9 @@ export function App() {
     setToastMessage(msg);
   };
 
-  const activeStore = getStoreBySlug(selectedStoreSlug) || STORES_DATA[0];
+  if (currentView === 'admin') {
+    return <AdminDashboard onBackToHome={() => handleNavigate('home')} />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-mds-cream text-mds-charcoal">
@@ -73,7 +84,7 @@ export function App() {
         />
       ) : (
         <StoreDetailsPage
-          store={activeStore}
+          slug={selectedStoreSlug}
           onBackToHome={() => handleNavigate('home')}
           onSelectStore={(slug) => handleNavigate('store', slug)}
           onShowToast={showToast}

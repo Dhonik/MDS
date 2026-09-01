@@ -15,6 +15,7 @@ export interface Store {
   altPhone?: string;
   whatsapp: string;
   mapUrl: string;
+  embedMapUrl?: string;
   openingHours: string;
   badge: string;
   imagePlaceholder: string;
@@ -43,7 +44,8 @@ export const STORES_DATA: Store[] = [
     phone: '+91 94889 37666',
     altPhone: '+91 94433 91966',
     whatsapp: '919488937666',
-    mapUrl: 'STORE_1_MAP_URL',
+    mapUrl: 'https://maps.app.goo.gl/K6yDcq6st2rwRyWB7',
+    embedMapUrl: 'https://maps.google.com/maps?q=8.2494,77.3592+(MDS+Vegetable+Shop+Thuckalay+Market)&z=16&output=embed',
     openingHours: '6:30 AM – 10:00 PM',
     badge: 'Flagship Vegetable Market Hub',
     imagePlaceholder: 'REPLACE_WITH_MDS_THUCKALAY_VEG_SHOP_PHOTO',
@@ -66,11 +68,12 @@ export const STORES_DATA: Store[] = [
       'Fast counter service for daily home cooks',
       'Dependable seasonal produce availability'
     ],
-    address: 'STORE_2_ADDRESS',
+    address: 'Vegetable Market Nagercoil, Puthukudierupu, Nagercoil, Tamil Nadu 629001',
     phone: '+91 94889 37666',
     altPhone: '+91 94433 91966',
     whatsapp: '919488937666',
-    mapUrl: 'STORE_2_MAP_URL',
+    mapUrl: 'https://www.google.com/maps/place/Vegetable+Market+Nagercoil,+Puthukudierupu,+Nagercoil,+Tamil+Nadu+629001/@8.1915724,77.4288807,17z/data=!3m1!4b1!4m6!3m5!1s0x3b04f12ebe3a1951:0x70f5796f8d6e1c36!8m2!3d8.1915307!4d77.4316496!16s%2Fg%2F11b8t8szy7',
+    embedMapUrl: 'https://maps.google.com/maps?q=8.1915307,77.4316496+(MDS+Vegetable+Shop+Nagercoil+Market)&z=16&output=embed',
     openingHours: '7:00 AM – 10:00 PM',
     badge: 'Regional Market Branch',
     imagePlaceholder: 'REPLACE_WITH_MDS_NAGERCOIL_VEG_SHOP_PHOTO',
@@ -97,7 +100,8 @@ export const STORES_DATA: Store[] = [
     phone: '+91 94889 37666',
     altPhone: '+91 94433 91966',
     whatsapp: '919488937666',
-    mapUrl: 'STORE_3_MAP_URL',
+    mapUrl: 'https://maps.app.goo.gl/1KTzmb3CX7FNMCbZ7',
+    embedMapUrl: 'https://maps.google.com/maps?q=8.2488,77.3620+(MDS+Fruit+Shop+Near+Thuckalay+Bus+Stand)&z=16&output=embed',
     openingHours: '6:30 AM – 9:30 PM',
     badge: 'Dedicated Fruit Specialist',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_SHOP_PHOTO',

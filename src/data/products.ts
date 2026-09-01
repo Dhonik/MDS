@@ -5,6 +5,7 @@ export interface ProductCategory {
   shortDesc: string;
   examples: string;
   imagePlaceholder: string;
+  imageUrl?: string;
   highlight?: string;
 }
 
@@ -16,6 +17,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Crisp, nutrient-rich green leaves harvested fresh daily for home kitchens and culinary preparations.',
     examples: 'Spinach (Palak), Fenugreek (Methi), Coriander, Curry Leaves, Mint, Amaranthus',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_LEAFY_PHOTO',
+    imageUrl: '/images/vegetables/leafy-vegetables.jpg',
     highlight: 'Harvested Daily'
   },
   {
@@ -25,6 +27,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Firm, earthy root produce selected for premium texture, freshness, and extended kitchen shelf life.',
     examples: 'Carrots, Beetroot, Radish (Mooli), Turnip, Tapioca',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_ROOT_PHOTO',
+    imageUrl: '/images/vegetables/root-vegetables.png',
   },
   {
     id: 'onions-potatoes',
@@ -33,6 +36,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Core culinary staples supplied in dependable grades for daily cooking and bulk commercial kitchens.',
     examples: 'Small Sambar Onions (Shallots), Big Red Onions, Premium Grade Potatoes',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_ONION_POTATO_PHOTO',
+    imageUrl: '/images/vegetables/onions-potatoes.png',
     highlight: 'Essential Bulk Staple'
   },
   {
@@ -42,6 +46,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Firm, sun-ripened tomatoes balanced in acidity and sweetness for curries, gravies, and salads.',
     examples: 'Country (Nattu) Tomatoes, Hybrid Firm Tomatoes',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_TOMATO_PHOTO',
+    imageUrl: '/images/vegetables/tomatoes.png',
   },
   {
     id: 'green-veg',
@@ -50,6 +55,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Tender pods, gourds, and garden greens picked for wholesome freshness and rich natural flavor.',
     examples: 'Beans, Peas, Capsicum (Bell Peppers), Ladies Finger (Okra), Bottle Gourd, Bitter Gourd',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_GREEN_PHOTO',
+    imageUrl: '/images/vegetables/green-vegetables.png',
   },
   {
     id: 'chillies',
@@ -58,6 +64,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Pungent, fresh chillies and essential aromatic aromatics sourced for distinct culinary heat.',
     examples: 'Green Chillies (Standard & Spicy varieties), Dry Chillies, Fresh Ginger',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_CHILLI_PHOTO',
+    imageUrl: '/images/vegetables/chillies.jpg',
   },
   {
     id: 'seasonal-veg',
@@ -66,6 +73,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Specialty seasonal harvests brought directly to our stalls at the peak of regional availability.',
     examples: 'Drumsticks, Raw Banana (Plantain), Ash Gourd, Pumpkin, Elephant Yam',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_SEASONAL_PHOTO',
+    imageUrl: '/images/vegetables/seasonal-vegetables.png',
     highlight: 'Regional Specials'
   },
   {
@@ -75,6 +83,7 @@ export const VEGETABLE_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Daily kitchen essentials, fresh aromatics, and supporting ingredients to complete any recipe.',
     examples: 'Garlic Bulbs, Lemons, Fresh Coconut, Ginger Roots',
     imagePlaceholder: 'REPLACE_WITH_MDS_VEGETABLE_OTHER_PHOTO',
+    imageUrl: '/images/vegetables/other-fresh-produce.jpg',
   }
 ];
 
@@ -86,6 +95,7 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Peak seasonal harvest fruits handpicked for natural sweetness, aroma, and premium freshness.',
     examples: 'Mangoes (in season), Custard Apples, Guavas, Pomegranates',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_SEASONAL_PHOTO',
+    imageUrl: '/images/fruits/seasonal-fruits.jpg',
     highlight: 'Peak Season Flavors'
   },
   {
@@ -95,6 +105,7 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Vibrant local and tropical delights renowned for juicy texture and natural nourishment.',
     examples: 'Papaya, Sweet Pineapples, Jackfruit, Watermelon',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_TROPICAL_PHOTO',
+    imageUrl: '/images/fruits/tropical-fruits.png',
   },
   {
     id: 'citrus-fruits',
@@ -103,6 +114,7 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Tangy, vitamin-packed citrus selections sourced for refreshing daily juices and direct consumption.',
     examples: 'Sweet Oranges (Mosambi), Kinnow, Lemons, Grapefruit',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_CITRUS_PHOTO',
+    imageUrl: '/images/fruits/citrus-fruits.jpg',
   },
   {
     id: 'bananas',
@@ -111,6 +123,7 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Classic everyday energy staples along with beloved regional South Indian plantain varieties.',
     examples: 'Poovan, Robusta, Red Banana (Sevvazhai), Nendran, Rasthali',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_BANANA_PHOTO',
+    imageUrl: '/images/fruits/bananas.png',
     highlight: 'South Indian Specialties'
   },
   {
@@ -120,6 +133,7 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Crisp, wholesome orchard fruits selected for firm crunch, deep color, and dependable sweetness.',
     examples: 'Royal Gala, Washington/Shimla Apples, Green Apples, Green Pears',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_APPLE_PHOTO',
+    imageUrl: '/images/fruits/apples.png',
   },
   {
     id: 'melons',
@@ -128,6 +142,7 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Naturally hydrating, sweet melons ideal for healthy snacking and fresh juice requirements.',
     examples: 'Striped Watermelon, Musk Melon (Cantaloupe), Sun Melons',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_MELON_PHOTO',
+    imageUrl: '/images/fruits/melons.png',
   },
   {
     id: 'other-fruits',
@@ -136,5 +151,6 @@ export const FRUIT_CATEGORIES: ProductCategory[] = [
     shortDesc: 'Assorted seasonal and table fruits to complete fruit platters, family gifts, and dessert recipes.',
     examples: 'Grapes (Black & Green Seedless), Dates, Sapota (Chiku), Plums',
     imagePlaceholder: 'REPLACE_WITH_MDS_FRUIT_OTHER_PHOTO',
+    imageUrl: '/images/fruits/other-fresh-fruits.png',
   }
 ];

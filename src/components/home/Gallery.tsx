@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
-import { GALLERY_ITEMS } from '../../data/business';
+import React, { useState, useEffect } from 'react';
+import { GalleryModel, fetchGalleryItems } from '../../services/galleryService';
 import { Icons } from '../common/Icons';
+import { EmptyState } from '../common/Skeletons';
 
 export const Gallery: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [items, setItems] = useState<GalleryModel[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = ['All', 'Vegetables', 'Fruits', 'Stores', 'Wholesale', 'Daily Operations'];
 
-  const filteredItems = activeFilter === 'All' 
-    ? GALLERY_ITEMS 
-    : GALLERY_ITEMS.filter((item) => item.category === activeFilter);
+  useEffect(() => {
+    setLoading(true);
+    fetchGalleryItems(activeFilter)
+      .then((data) => setItems(data))
+      .catch((err) => console.error('Gallery fetch error:', err))
+      .finally(() => setLoading(false));
+  }, [activeFilter]);
 
   return (
     <section id="gallery" className="py-20 md:py-28 bg-mds-cream relative border-t border-mds-border/40">
@@ -47,47 +54,64 @@ export const Gallery: React.FC = () => {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              className="group bg-white rounded-2xl overflow-hidden border border-mds-border/70 shadow-soft hover:shadow-card transition-all duration-300 flex flex-col justify-between"
-            >
-              {/* Photo Placeholder Display */}
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-mds-sand via-gray-100 to-mds-cream p-4 flex flex-col justify-between border-b border-mds-border/50 overflow-hidden">
-                <div className="flex justify-between items-start z-10">
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/90 text-mds-primary shadow-xs border border-gray-200">
-                    {item.category}
-                  </span>
-                </div>
-
-                <div className="z-10 bg-white/90 backdrop-blur-xs rounded-lg p-2 text-center border border-gray-200">
-                  <span className="text-[10px] font-mono text-gray-500 block truncate">
-                    // {item.placeholder}
-                  </span>
-                </div>
-
-                <div className="absolute inset-0 bg-mds-primary/5 group-hover:bg-mds-primary/10 transition-colors pointer-events-none"></div>
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl p-4 border border-mds-border/70 animate-pulse space-y-3">
+                <div className="aspect-[4/3] bg-gray-200 rounded-xl"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
               </div>
+            ))}
+          </div>
+        ) : items.length === 0 ? (
+          <EmptyState title="Photos Updating" message="Photos will be updated soon." />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className="group bg-white rounded-2xl overflow-hidden border border-mds-border/70 shadow-soft hover:shadow-card transition-all duration-300 flex flex-col justify-between"
+              >
+                {/* Photo Display */}
+                <div className="relative aspect-[4/3] bg-gradient-to-br from-mds-sand via-gray-100 to-mds-cream p-4 flex flex-col justify-between border-b border-mds-border/50 overflow-hidden">
+                  <div className="flex justify-between items-start z-10">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/90 text-mds-primary shadow-xs border border-gray-200">
+                      {item.category}
+                    </span>
+                  </div>
 
-              {/* Title & Tag */}
-              <div className="p-4">
-                <h4 className="text-sm font-bold text-mds-charcoal font-heading group-hover:text-mds-primary transition-colors">
-                  {item.title}
-                </h4>
-                <div className="text-[11px] text-mds-muted mt-0.5">
-                  Category: {item.category}
+                  {item.image_url ? (
+                    <img src={item.image_url} alt={item.title || 'MDS Photo'} className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <div className="z-10 bg-white/90 backdrop-blur-xs rounded-lg p-2 text-center border border-gray-200">
+                      <span className="text-[10px] font-mono text-gray-500 block truncate">
+                        // {item.placeholder || `REPLACE_WITH_MDS_GALLERY_${item.id}_PHOTO`}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-mds-primary/5 group-hover:bg-mds-primary/10 transition-colors pointer-events-none"></div>
                 </div>
-              </div>
 
-            </div>
-          ))}
-        </div>
+                {/* Title & Tag */}
+                <div className="p-4">
+                  <h4 className="text-sm font-bold text-mds-charcoal font-heading group-hover:text-mds-primary transition-colors">
+                    {item.title || 'MDS Gallery View'}
+                  </h4>
+                  <div className="text-[11px] text-mds-muted mt-0.5">
+                    Category: {item.category}
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Easy photo replacement note */}
         <div className="mt-10 text-center">
           <span className="text-xs font-mono text-gray-500 bg-white px-4 py-2 rounded-xl border border-mds-border">
-            📸 Structured for easy replacement with actual MDS store, produce, and market photographs.
+            📸 Dynamic Supabase Gallery — uploaded images update here in real-time.
           </span>
         </div>
 

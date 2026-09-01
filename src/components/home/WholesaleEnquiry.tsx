@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Icons } from '../common/Icons';
-import { BUSINESS_INFO, WHOLESALE_CLIENTS } from '../../data/business';
+import { WHOLESALE_CLIENTS } from '../../data/business';
+import { submitEnquiry } from '../../services/enquiryService';
+import { generateWhatsAppLink } from '../../lib/utils';
 
 interface WholesaleEnquiryProps {
   onShowToast: (msg: string) => void;
@@ -12,36 +14,70 @@ export const WholesaleEnquiry: React.FC<WholesaleEnquiryProps> = ({ onShowToast 
     businessName: '',
     phone: '',
     location: '',
-    productType: 'Vegetables & Fruits',
+    productType: 'Vegetables (All varieties)',
     quantity: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone) {
+    if (!formData.name.trim() || !formData.phone.trim()) {
       onShowToast('Please provide your name and contact phone number.');
       return;
     }
 
-    // Build pre-formatted WhatsApp text for actual direct communication
-    const waText = encodeURIComponent(
-      `Hello MDS, I would like to make a wholesale enquiry.\n\n` +
-      `Name: ${formData.name}\n` +
-      `Business: ${formData.businessName || 'N/A'}\n` +
-      `Phone: ${formData.phone}\n` +
-      `Location: ${formData.location || 'Local'}\n` +
-      `Requirement: ${formData.productType}\n` +
-      `Approx Quantity: ${formData.quantity || 'N/A'}\n` +
-      `Message: ${formData.message || 'Please contact me with bulk pricing and supply details.'}`
-    );
+    setIsSubmitting(true);
+    setErrorMsg(null);
 
-    setIsSubmitted(true);
-    onShowToast('Enquiry prepared. You can connect directly via WhatsApp or Phone.');
+    const result = await submitEnquiry({
+      name: formData.name,
+      business_name: formData.businessName,
+      phone: formData.phone,
+      location: formData.location,
+      enquiry_type: 'wholesale',
+      product_requirement: formData.productType,
+      quantity: formData.quantity,
+      message: formData.message,
+    });
 
-    // Open WhatsApp in new tab with the structured text
-    window.open(`https://wa.me/${BUSINESS_INFO.generalWhatsApp}?text=${waText}`, '_blank');
+    setIsSubmitting(false);
+
+    if (result.success) {
+      setIsSubmitted(true);
+      onShowToast('Thank you. Your enquiry has been received. The MDS team will contact you shortly.');
+
+      // Also generate direct WhatsApp connect link
+      const waText = 
+        `Hello MDS, I have submitted a wholesale enquiry via your website:\n\n` +
+        `Name: ${formData.name}\n` +
+        `Business: ${formData.businessName || 'N/A'}\n` +
+        `Phone: ${formData.phone}\n` +
+        `Location: ${formData.location || 'Local'}\n` +
+        `Requirement: ${formData.productType}\n` +
+        `Quantity: ${formData.quantity || 'N/A'}\n` +
+        `Message: ${formData.message || 'Please contact me with bulk pricing and supply details.'}`;
+
+      const waUrl = generateWhatsAppLink('919488937666', waText);
+      if (waUrl !== '#') {
+        window.open(waUrl, '_blank');
+      }
+
+      setFormData({
+        name: '',
+        businessName: '',
+        phone: '',
+        location: '',
+        productType: 'Vegetables (All varieties)',
+        quantity: '',
+        message: '',
+      });
+    } else {
+      setErrorMsg('Something went wrong while sending your enquiry. Please try again.');
+      onShowToast('Something went wrong while sending your enquiry. Please try again.');
+    }
   };
 
   return (
@@ -129,16 +165,22 @@ export const WholesaleEnquiry: React.FC<WholesaleEnquiryProps> = ({ onShowToast 
                 </span>
               </div>
 
+              {errorMsg && (
+                <div className="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+                  {errorMsg}
+                </div>
+              )}
+
               {isSubmitted ? (
                 <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-4 animate-fadeIn">
                   <div className="w-12 h-12 rounded-full bg-emerald-200 text-mds-primary mx-auto flex items-center justify-center">
                     <Icons.Check className="w-6 h-6" />
                   </div>
                   <h4 className="text-lg font-bold text-mds-charcoal font-heading">
-                    Thank You for Contacting MDS
+                    Thank you. Your enquiry has been received.
                   </h4>
                   <p className="text-xs text-mds-muted max-w-md mx-auto leading-relaxed">
-                    Your wholesale requirements have been recorded. You can also reach our team immediately on WhatsApp or Phone for daily procurement schedules.
+                    The MDS team will contact you shortly. We have also opened our WhatsApp desk for fast instant communication.
                   </p>
                   <button
                     onClick={() => setIsSubmitted(false)}
@@ -263,13 +305,20 @@ export const WholesaleEnquiry: React.FC<WholesaleEnquiryProps> = ({ onShowToast 
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-4 px-6 rounded-xl bg-mds-primary text-white font-bold text-sm hover:bg-mds-accent active:scale-[0.99] transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer"
+                      disabled={isSubmitting}
+                      className="w-full py-4 px-6 rounded-xl bg-mds-primary text-white font-bold text-sm hover:bg-mds-accent active:scale-[0.99] transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:opacity-70"
                     >
-                      <Icons.WhatsApp className="w-4 h-4 text-emerald-300" />
-                      <span>Send Wholesale Enquiry</span>
+                      {isSubmitting ? (
+                        <span>Submitting Enquiry...</span>
+                      ) : (
+                        <>
+                          <Icons.WhatsApp className="w-4 h-4 text-emerald-300" />
+                          <span>Send Wholesale Enquiry</span>
+                        </>
+                      )}
                     </button>
                     <p className="text-[11px] text-center text-gray-400 mt-2">
-                      Connects directly to MDS Wholesale Enquiry Desk
+                      Securely recorded in MDS enquiry desk & connected to WhatsApp
                     </p>
                   </div>
 
